@@ -12,6 +12,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+export function ThemeToggle() {
+  const { setTheme, theme } = useTheme();
+
+  return (
+    <Button
+      onClick={() => {
+        setTheme(theme === "dark" ? "light" : "dark");
+      }}
+      variant={"outline"}
+      className="flex flex-row items-center justify-between gap-2"
+    >
+      Toggle Theme
+      <Sun className="inline dark:hidden" />
+      <Moon className="hidden dark:inline" />
+    </Button>
+  );
+}
+
 export function ThemeSwitch() {
   const { setTheme } = useTheme();
 

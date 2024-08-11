@@ -5,8 +5,15 @@ import {
   SheetFooter,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
-import { LandPlot, Menu, MenuIcon, Package2 } from "lucide-react";
+import { ThemeSwitch, ThemeToggle } from "@/components/ui/ThemeSwitch";
+import {
+  DoorOpenIcon,
+  FormInputIcon,
+  LandPlot,
+  Menu,
+  MenuIcon,
+  Package2,
+} from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -54,11 +61,25 @@ const Navbar = () => {
               <span className="sr-only">Chore Chase</span>
             </Link>
             <div className="grid gap-2 text-lg font-medium">
-              <Button variant={"outline"} asChild>
-                <Link href="/login">Log in</Link>
+              <ThemeToggle />
+              <Button
+                className="flex flex-row items-center justify-between"
+                variant={"outline"}
+                asChild
+              >
+                <Link href="/login">
+                  Log in
+                  <DoorOpenIcon />
+                </Link>
               </Button>
-              <Button asChild>
-                <Link href={"/register"}>Register</Link>
+              <Button
+                className="flex flex-row items-center justify-between"
+                asChild
+              >
+                <Link href={"/register"}>
+                  Register
+                  <FormInputIcon />
+                </Link>
               </Button>
             </div>
           </nav>
