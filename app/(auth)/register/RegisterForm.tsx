@@ -43,7 +43,9 @@ export default function RegisterForm() {
     setError("");
 
     register(values).then((data) => {
-      setError(data.error);
+      if (data?.error) {
+        setError(data.error);
+      }
     });
   }
 
