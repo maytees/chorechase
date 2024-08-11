@@ -21,9 +21,9 @@ const Navbar = () => {
   return (
     <div className="flex h-[8vh] flex-row items-center justify-between border-b px-5 sm:px-20 lg:px-40 2xl:px-52">
       <Link href="/">
-        <div className="flex flex-row items-end gap-2">
+        <div className="text-bold flex flex-row items-end gap-2">
           <LandPlot className="h-10 w-10 font-semibold text-primary" />
-          <h1 className="text-3xl">
+          <h1 className="text-3xl font-semibold">
             Chore<span className="text-primary">Chase</span>
           </h1>
         </div>
