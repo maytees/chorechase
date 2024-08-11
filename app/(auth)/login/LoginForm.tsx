@@ -22,8 +22,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { loginSchema } from "@/lib/validation";
+import { SubmitButton } from "@/components/SubmitButtons";
+import { ErrorComponent } from "@/components/FormInfo";
+import { useState } from "react";
+import { login } from "@/actions/login";
 
 export default function LoginForm() {
+  const [error, setError] = useState<string | undefined>();
+
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -32,7 +38,15 @@ export default function LoginForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof loginSchema>) {}
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
+    setError("");
+
+    login(values).then((data) => {
+      if (data?.error) {
+        setError(data?.error);
+      }
+    });
+  }
 
   return (
     <Card className="w-full max-w-sm">
@@ -71,11 +85,10 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
+            <ErrorComponent message={error} />
           </CardContent>
           <CardFooter>
-            <Button className="w-full" type="submit">
-              Sign in
-            </Button>
+            <SubmitButton />
           </CardFooter>
         </form>
       </Form>
