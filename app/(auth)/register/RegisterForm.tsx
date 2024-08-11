@@ -43,12 +43,7 @@ export default function RegisterForm() {
     setError("");
 
     register(values).then((data) => {
-      if (data?.error) {
-        setError(data.error);
-        return;
-      }
-
-      form.reset();
+      setError(data.error);
     });
   }
 
