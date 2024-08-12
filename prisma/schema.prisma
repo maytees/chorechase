@@ -13,17 +13,84 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       String    @id @default(cuid())
-  sessions Session[]
-  username String @unique
-  password_hash String
-}
-
 model Session {
   id        String   @id
-  userId    String 
+  userId    String
   expiresAt DateTime
 
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model User {
+  id              String          @id @default(cuid())
+  sessions        Session[]
+  username        String          @unique
+  password_hash   String
+  coins           Int             @default(100)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  HouseHold       HouseHold?      @relation(fields: [houseHoldId], references: [id])
+  houseHoldId     String?
+  completedChores ChoreInstance[] @relation("CompletedChores")
+  createdChores   ChoreInstance[] @relation("CreatedChores")
+}
+
+model HouseHold {
+  id             String          @id @default(cuid())
+  name           String
+  joinCode       String          @unique
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  users          User[]
+  choreTemplates ChoreTemplate[] // For repeated chores and such, like dishes
+  choreInstances ChoreInstance[]
+}
+
+model ChoreTemplate {
+  id          String          @id @default(cuid())
+  title       String
+  description String?         @default("No description for this chore.")
+  reward      Int
+  frequency   ChoreFrequency  @default(DAILY)
+  type        String // Really an be defined by the user; no standard
+  image       String?
+  difficulty  Int // range 1 - 5
+  updatedAt   DateTime        @updatedAt
+  HouseHold   HouseHold?      @relation(fields: [houseHoldId], references: [id])
+  houseHoldId String?
+  instances   ChoreInstance[]
+}
+
+model ChoreInstance {
+  id              String         @id @default(cuid())
+  title           String
+  description     String?
+  // Should change based on difficulty, same as template by default
+  reward          Int
+  status          ChoreStatus    @default(UNCLAIMED)
+  dueDate         DateTime
+  completedAt     DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  completedBy     User?          @relation("CompletedChores", fields: [completedById], references: [id])
+  completedById   String?
+  createdBy       User           @relation("CreatedChores", fields: [createdById], references: [id])
+  createdById     String
+  choreTemplate   ChoreTemplate? @relation(fields: [choreTemplateId], references: [id])
+  choreTemplateId String?
+  HouseHold       HouseHold?     @relation(fields: [houseHoldId], references: [id])
+  houseHoldId     String?
+}
+
+enum ChoreStatus {
+  UNCLAIMED
+  CLAIMED
+  COMPLETED
+}
+
+enum ChoreFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  ONCE
 }
